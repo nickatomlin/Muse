@@ -34,6 +34,7 @@ def main(muse_player):
     try:
         process = subprocess.Popen([muse_player, "-l", "5000"], stdout=subprocess.PIPE)
         for line in process.stdout:
+            line = line.decode("utf-8")
             if "/muse/eeg " in line:
                 split = line.split()
                 timestamp = float(split[0]) # unix timestamp in UTC
