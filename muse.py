@@ -25,6 +25,38 @@ def display_letter(sequence):
     else:
         print(sequence, "could not be recognized as a character.")
 
+
+tick = 1    # length of 1 unit of morse code time
+letter = "" # string of 0 for dot, 1 for dash
+recent = 2  # most recent action
+
+
+def process_letter():
+    display_letter(letter)
+    letter = ""
+
+
+def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very first call
+    if (action == 0):
+        if (time > 2*tick):
+            process_letter();
+        if (time > 5*tick):
+            print(" ")
+        if (time < 2*tick and recent == 0)
+            letter += '0'
+
+
+    elif (action == 1):
+        if (recent == 0):
+            letter += '1'
+    elif (action == 2):
+        if (recent ==0):
+            letter += '0'
+    recent = action;
+
+
+
+
 def interpret_eeg(timestamp, datapoint):
     # TODO interpret data
     print(timestamp, " -> ", datapoint)
