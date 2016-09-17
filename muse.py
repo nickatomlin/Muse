@@ -29,6 +29,19 @@ def interpret_eeg(timestamp, datapoint):
     # TODO interpret data
     print(timestamp, " -> ", datapoint)
 
+last_timestamp = 0
+items = []
+def smooth(timestamp, datapoint):
+    if timestamp == last_timestamp:
+        items.append(datapoint)
+    else:
+        if len(items) > 0:
+            average = sum(items) / len(items)
+            interpret_eeg(timestamp, average)
+
+        last_timestamp = timestamp
+        items = [datapoint]
+
 # muse_player = path to muse player
 def main(muse_player):
     try:
@@ -42,7 +55,7 @@ def main(muse_player):
                 for i in range(0, len(eeg)):
                     eeg[i] = float(eeg[i])
                 # only interpret track 0
-                interpret_eeg(timestamp, eeg[0])
+                smooth(timestamp, eeg[0])
     except subprocess.CalledProcessError as e:
         print("Stdout output:\n", e.output)
 
