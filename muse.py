@@ -6,7 +6,7 @@ import sys
 len_1 = {0: 'e', 1: 't'}
 len_2 = {1: 'a', 0: 'i', 3: 'm', 2: 'n'}
 len_3 = {4: 'd', 6: 'g', 5: 'k', 7: 'o', 2: 'r', 0: 's', 1: 'u', 3: 'w'}
-len_4 = {8: 'b', 10: 'c', 2: 'f', 0: 'h', 7: 'j', 4: 'l', 6: 'p', 13: 'q', 1: 'v', 9: 'x', 11: 'y', 12: 'z'}
+len_4 = {8: 'b', 10: 'c', 2: 'f', 0: 'h', 7: 'j', 4: 'l', 6: 'p', 13: 'q', 1: 'v', 9: 'x', 11: 'y', 12: 'z', 15: ' '}
 # takes in a binary string (sequence) and displays the corresponding letter
 # 0=dot, 1=dash
 # 1111=space
@@ -25,6 +25,10 @@ def display_letter(sequence):
     else:
         print(sequence, "could not be recognized as a character.")
 
+def interpret_eeg(timestamp, datapoint):
+    # TODO interpret data
+    print(timestamp, " -> ", datapoint)
+
 # muse_player = path to muse player
 def main(muse_player):
     try:
@@ -33,12 +37,11 @@ def main(muse_player):
             if "/muse/eeg " in line:
                 split = line.split()
                 timestamp = float(split[0]) # unix timestamp in UTC
-                eeg = split[3:7] # eeg data
+                eeg = split[3:7] # eeg data (organized into tracks)
                 for i in range(0, len(eeg)):
                     eeg[i] = int(eeg[i])
-
-                print(eeg)
-                # TODO interpret data
+                # only interpret track 0
+                interpret_eeg(timestamp, eeg[0])
     except subprocess.CalledProcessError as e:
         print("Stdout output:\n", e.output)
 
