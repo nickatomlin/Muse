@@ -39,7 +39,7 @@ def main(muse_player):
                 timestamp = float(split[0]) # unix timestamp in UTC
                 eeg = split[3:7] # eeg data (organized into tracks)
                 for i in range(0, len(eeg)):
-                    eeg[i] = int(eeg[i])
+                    eeg[i] = float(eeg[i])
                 # only interpret track 0
                 interpret_eeg(timestamp, eeg[0])
     except subprocess.CalledProcessError as e:
