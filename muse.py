@@ -1,4 +1,7 @@
+#!/usr/bin/python
+
 import subprocess
+import sys
 
 len_1 = {0: 'e', 1: 't'}
 len_2 = {1: 'a', 0: 'i', 3: 'm', 2: 'n'}
@@ -22,16 +25,25 @@ def display_letter(sequence):
     else:
         print(sequence, "could not be recognized as a character.")
 
-def main():
+# muse_player = path to muse player
+def main(muse_player):
     try:
-        # TODO make sure reference to muse-player works
-        process = subprocess.Popen(["muse-player", "-l", "5000"], stdout=subprocess.PIPE)
+        process = subprocess.Popen([muse_player, "-l", "5000"], stdout=subprocess.PIPE)
         for line in process.stdout:
             if "/muse/eeg " in line:
-                # TODO interpret line
-                print(line)
+                split = line.split()
+                timestamp = float(split[0]) # unix timestamp in UTC
+                eeg = split[3:7] # eeg data
+                for i in range(0, len(eeg)):
+                    eeg[i] = int(eeg[i])
+
+                print(eeg)
+                # TODO interpret data
     except subprocess.CalledProcessError as e:
         print("Stdout output:\n", e.output)
 
 if __name__ == "__main__":
-    main()
+    if (len(sys.argv) < 2):
+        print("Usage: muse.py path-to-muse-player")
+    else:
+        main(sys.argv[1])
