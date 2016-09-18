@@ -11,6 +11,7 @@ len_4 = {8: 'b', 10: 'c', 2: 'f', 0: 'h', 7: 'j', 4: 'l', 6: 'p', 13: 'q', 1: 'v
 # 0=dot, 1=dash
 # 1111=space
 def display_letter(sequence):
+    print(sequence)
     length = len(sequence)
     value = int(sequence, 2)
 
@@ -26,7 +27,7 @@ def display_letter(sequence):
         print(sequence, "could not be recognized as a character.")
 
 
-tick = 0.1  # length of 1 unit of morse code time
+tick = 0.5  # length of 1 unit of morse code time
 letter = "" # string of 0 for dot, 1 for dash
 recent = 2  # most recent action
 
@@ -50,14 +51,14 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
         if time > 2 * tick:
             process_letter();
         if time > 5 * tick:
-            print(" ")
+            display_letter("1111")
         if time < 2 * tick and recent == 0:
             letter += '0'
     elif action == 1:
         if recent == 0:
             if time > 2 * tick:
                 letter += '1'
-            if time < 2 * tick:
+            if time <= 2 * tick:
                 letter += '0'
     elif action == 2:
         if recent == 0:
@@ -66,7 +67,7 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
     recent = action;
 
 last_event = -2
-last_time = 0
+last_time = 0.0
 def interpret_eeg(timestamp, datapoint):
     global last_event
     global last_time
@@ -78,20 +79,26 @@ def interpret_eeg(timestamp, datapoint):
         event = 1
     else:
         # no blink (normal)
+        event = 4
+        '''
         if last_event >= 0 and timestamp - last_time > tick * 5:
             # timeout, send last event
-            process(last_event, timestamp)
+            #print("TIMEOUT")
+            process(2, timestamp)
             last_event = -1
         return
+        '''
 
-    print("event", event)
-    if last_event < 0:
-        if last_event == -1:
-            process(3, 0)
-            last_event = event
-            last_time = timestamp
+    print(timestamp, "->", event)
+    #print("last", last_event)
+    #print("event", event)
+    if last_event < -1:
+        process(3, 0)
+        last_event = event
+        last_time = timestamp
     elif event != last_event:
-        process(last_event, timestamp - last_time)
+        if last_event >= 0 and last_event != 4:
+            process(last_event, timestamp - last_time)
 
         last_event = event
         last_time = timestamp
