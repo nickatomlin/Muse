@@ -11,7 +11,7 @@ len_4 = {8: 'b', 10: 'c', 2: 'f', 0: 'h', 7: 'j', 4: 'l', 6: 'p', 13: 'q', 1: 'v
 # 0=dot, 1=dash
 # 1111=space
 def display_letter(sequence):
-    print(sequence)
+    #print(sequence)
     length = len(sequence)
     value = int(sequence, 2)
 
@@ -32,7 +32,7 @@ def display_letter(sequence):
     sys.stdout.flush()
 
 
-tick = 0.2  # length of 1 unit of morse code time
+tick = 0.3  # length of 1 unit of morse code time
 letter = "" # string of 0 for dot, 1 for dash
 recent = 2  # most recent action
 
@@ -46,7 +46,7 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
     global tick
     global letter
     global recent
-    print("process", action, time)
+    #print("process", action, time)
 
     if action == 3:
         recent = 0;
@@ -79,7 +79,7 @@ def interpret_eeg(timestamp, datapoint):
     #global timeout_sent
 
     event = -1
-    if datapoint < 700:
+    if datapoint < 800:
         event = 0
     elif datapoint > 1000:
         event = 1
