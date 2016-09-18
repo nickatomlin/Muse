@@ -27,7 +27,7 @@ def display_letter(sequence):
         print(sequence, "could not be recognized as a character.")
 
 
-tick = 0.5  # length of 1 unit of morse code time
+tick = 0.2  # length of 1 unit of morse code time
 letter = "" # string of 0 for dot, 1 for dash
 recent = 2  # most recent action
 
@@ -55,11 +55,10 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
         if time < 2 * tick and recent == 0:
             letter += '0'
     elif action == 1:
-        if recent == 0:
-            if time > 2 * tick:
-                letter += '1'
-            if time <= 2 * tick:
-                letter += '0'
+        if time > 2 * tick:
+            letter += '1'
+        if time <= 2 * tick:
+            letter += '0'
     elif action == 2:
         if recent == 0:
             letter += '0'
@@ -89,7 +88,7 @@ def interpret_eeg(timestamp, datapoint):
         return
         '''
 
-    print(timestamp, "->", event)
+    #print(timestamp, "->", event)
     #print("last", last_event)
     #print("event", event)
     if last_event < -1:
@@ -97,11 +96,15 @@ def interpret_eeg(timestamp, datapoint):
         last_event = event
         last_time = timestamp
     elif event != last_event:
+        #print("not equal")
         if last_event >= 0 and last_event != 4:
+            #print("timestamp", timestamp)
+            #print("last_time", last_time)
+            #print("diff", timestamp - last_time)
             process(last_event, timestamp - last_time)
+            last_time = timestamp
 
         last_event = event
-        last_time = timestamp
 
 last_timestamp = 0
 items = []
