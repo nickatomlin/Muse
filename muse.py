@@ -31,10 +31,12 @@ letter = "" # string of 0 for dot, 1 for dash
 recent = 2  # most recent action
 
 def process_letter():
+    global letter
     display_letter(letter)
     letter = ""
 
 def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very first call
+    print("process", action, time)
 
     if (action == 3):
         recent = 0;
@@ -60,14 +62,31 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
             letter += '0'
     recent = action;
 
+last_event = -1
+last_time = 0
 def interpret_eeg(timestamp, datapoint):
+    global last_event
+    global last_time
+
+    event = -1
     if datapoint < 750:
-        print("down")
+        event = 0
     elif datapoint > 1000:
-        print("up")
+        event = 1
     else:
-        print("normal")
-    #print(timestamp, " -> ", datapoint)
+        # no blink, do nothing
+        return
+
+    #print("event", event)
+    if last_event < 0:
+        process(3, 0)
+        last_event = event
+        last_time = timestamp
+    elif event != last_event:
+        process(last_event, timestamp - last_time)
+
+        last_event = event
+        last_time = timestamp
 
 last_timestamp = 0
 items = []
