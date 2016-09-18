@@ -15,16 +15,19 @@ def display_letter(sequence):
     length = len(sequence)
     value = int(sequence, 2)
 
-    if length == 1:
-        sys.stdout.write(len_1[value])
-    elif length == 2:
-        sys.stdout.write(len_2[value])
-    elif length == 3:
-        sys.stdout.write(len_3[value])
-    elif length == 4:
-        sys.stdout.write(len_4[value])
-    else:
-        #print(sequence, "could not be recognized as a character.")
+    try:
+        if length == 1:
+            sys.stdout.write(len_1[value])
+        elif length == 2:
+            sys.stdout.write(len_2[value])
+        elif length == 3:
+            sys.stdout.write(len_3[value])
+        elif length == 4:
+            sys.stdout.write(len_4[value])
+        else:
+            #print(sequence, "could not be recognized as a character.")
+            sys.stdout.write("*")
+    except KeyError as e:
         sys.stdout.write("*")
     sys.stdout.flush()
 
@@ -50,12 +53,12 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
         return;
 
     if action == 0:
+        if recent == 0:
+            letter += '0'
         if time > 2 * tick:
             process_letter();
         if time > 5 * tick:
             display_letter("1111")
-        if time < 2 * tick and recent == 0:
-            letter += '0'
     elif action == 1:
         if time > 2 * tick:
             letter += '1'
