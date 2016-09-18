@@ -30,11 +30,9 @@ tick = 1    # length of 1 unit of morse code time
 letter = "" # string of 0 for dot, 1 for dash
 recent = 2  # most recent action
 
-
 def process_letter():
     display_letter(letter)
     letter = ""
-
 
 def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very first call
     if (action == 0):
@@ -42,7 +40,7 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
             process_letter();
         if (time > 5*tick):
             print(" ")
-        if (time < 2*tick and recent == 0)
+        if (time < 2*tick and recent == 0):
             letter += '0'
 
 
@@ -54,16 +52,21 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
             letter += '0'
     recent = action;
 
-
-
-
 def interpret_eeg(timestamp, datapoint):
-    # TODO interpret data
-    print(timestamp, " -> ", datapoint)
+    if datapoint < 750:
+        print("down")
+    elif datapoint > 1000:
+        print("up")
+    else:
+        print("normal")
+    #print(timestamp, " -> ", datapoint)
 
 last_timestamp = 0
 items = []
 def smooth(timestamp, datapoint):
+    global last_timestamp
+    global items
+
     if timestamp == last_timestamp:
         items.append(datapoint)
     else:
