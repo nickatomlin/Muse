@@ -65,7 +65,7 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
             process_letter();
     recent = action;
 
-last_event = -1
+last_event = -2
 last_time = 0
 def interpret_eeg(timestamp, datapoint):
     global last_event
@@ -81,14 +81,15 @@ def interpret_eeg(timestamp, datapoint):
         if last_event >= 0 and timestamp - last_time > tick * 5:
             # timeout, send last event
             process(last_event, timestamp)
-            last_event = 3
+            last_event = -1
         return
 
     print("event", event)
     if last_event < 0:
-        process(3, 0)
-        last_event = event
-        last_time = timestamp
+        if last_event == -1:
+            process(3, 0)
+            last_event = event
+            last_time = timestamp
     elif event != last_event:
         process(last_event, timestamp - last_time)
 
