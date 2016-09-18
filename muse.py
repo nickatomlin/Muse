@@ -62,6 +62,7 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
     elif action == 2:
         if recent == 0:
             letter += '0'
+            process_letter();
     recent = action;
 
 last_event = -1
