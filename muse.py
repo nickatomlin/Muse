@@ -11,7 +11,7 @@ len_4 = {8: 'b', 10: 'c', 2: 'f', 0: 'h', 7: 'j', 4: 'l', 6: 'p', 13: 'q', 1: 'v
 # 0=dot, 1=dash
 # 1111=space
 def display_letter(sequence):
-    #print(sequence)
+    print(sequence)
     length = len(sequence)
     value = int(sequence, 2)
 
@@ -43,7 +43,7 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
     global tick
     global letter
     global recent
-    #print("process", action, time)
+    print("process", action, time)
 
     if action == 3:
         recent = 0;
@@ -76,7 +76,7 @@ def interpret_eeg(timestamp, datapoint):
     #global timeout_sent
 
     event = -1
-    if datapoint < 750:
+    if datapoint < 700:
         event = 0
     elif datapoint > 1000:
         event = 1
