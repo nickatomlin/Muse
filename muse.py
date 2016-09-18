@@ -11,7 +11,6 @@ len_4 = {8: 'b', 10: 'c', 2: 'f', 0: 'h', 7: 'j', 4: 'l', 6: 'p', 13: 'q', 1: 'v
 # 0=dot, 1=dash
 # 1111=space
 def display_letter(sequence):
-    #print(sequence)
     length = len(sequence)
     value = int(sequence, 2)
 
@@ -25,7 +24,6 @@ def display_letter(sequence):
         elif length == 4:
             sys.stdout.write(len_4[value])
         else:
-            #print(sequence, "could not be recognized as a character.")
             sys.stdout.write("*")
     except KeyError as e:
         sys.stdout.write("*")
@@ -46,7 +44,6 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
     global tick
     global letter
     global recent
-    #print("process", action, time)
 
     if action == 3:
         recent = 0;
@@ -72,11 +69,9 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
 
 last_event = -2
 last_time = 0.0
-#timeout_sent = False
 def interpret_eeg(timestamp, datapoint):
     global last_event
     global last_time
-    #global timeout_sent
 
     event = -1
     if datapoint < 800:
@@ -86,37 +81,15 @@ def interpret_eeg(timestamp, datapoint):
     else:
         # no blink (normal)
         event = 4
-        '''
-        if last_event >= 0 and timestamp - last_time > tick * 5:
-            # timeout, send last event
-            #print("TIMEOUT")
-            process(2, timestamp)
-            last_event = -1
-        return
-        '''
-        '''
-        if last_event >= 0 and timestamp - last_time > tick * 5 and not timeout_sent:
-            # timeout, send last event
-            print("TIMEOUT")
-            process(2, 0)
-        '''
 
-    #print(timestamp, "->", event)
-    #print("last", last_event)
-    #print("event", event)
     if last_event < -1:
         process(3, 0)
         last_event = event
         last_time = timestamp
     elif event != last_event:
-        #print("not equal")
         if last_event >= 0 and last_event != 4:
-            #print("timestamp", timestamp)
-            #print("last_time", last_time)
-            #print("diff", timestamp - last_time)
             process(last_event, timestamp - last_time)
             last_time = timestamp
-            #timeout_sent = False
 
         last_event = event
 
