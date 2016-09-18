@@ -41,27 +41,27 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
     global recent
     print("process", action, time)
 
-    if (action == 3):
+    if action == 3:
         recent = 0;
         return;
 
-    if (action == 0):
-        if (time > 2*tick):
+    if action == 0:
+        if time > 2 * tick:
             process_letter();
-        if (time > 5*tick):
+        if time > 5 * tick:
             print(" ")
-        if (time < 2*tick and recent == 0):
+        if time < 2 * tick and recent == 0:
             letter += '0'
 
 
-    elif (action == 1):
-        if (recent == 0):
-            if (time > 2*tick):
+    elif action == 1:
+        if recent == 0:
+            if time > 2 * tick:
                 letter += '1'
-            if (time < 2*tick):
+            if time < 2 * tick:
                 letter += '0'
-    elif (action == 2):
-        if (recent ==0):
+    elif action == 2:
+        if recent == 0:
             letter += '0'
     recent = action;
 
