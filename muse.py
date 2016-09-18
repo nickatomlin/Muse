@@ -35,6 +35,11 @@ def process_letter():
     letter = ""
 
 def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very first call
+
+    if (action == 3):
+        recent = 0;
+        return;
+
     if (action == 0):
         if (time > 2*tick):
             process_letter();
