@@ -11,20 +11,22 @@ len_4 = {8: 'b', 10: 'c', 2: 'f', 0: 'h', 7: 'j', 4: 'l', 6: 'p', 13: 'q', 1: 'v
 # 0=dot, 1=dash
 # 1111=space
 def display_letter(sequence):
-    print(sequence)
+    #print(sequence)
     length = len(sequence)
     value = int(sequence, 2)
 
     if length == 1:
-        print(len_1[value])
+        sys.stdout.write(len_1[value])
     elif length == 2:
-        print(len_2[value])
+        sys.stdout.write(len_2[value])
     elif length == 3:
-        print(len_3[value])
+        sys.stdout.write(len_3[value])
     elif length == 4:
-        print(len_4[value])
+        sys.stdout.write(len_4[value])
     else:
-        print(sequence, "could not be recognized as a character.")
+        #print(sequence, "could not be recognized as a character.")
+        sys.stdout.write("*")
+    sys.stdout.flush()
 
 
 tick = 0.2  # length of 1 unit of morse code time
@@ -41,7 +43,7 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
     global tick
     global letter
     global recent
-    print("process", action, time)
+    #print("process", action, time)
 
     if action == 3:
         recent = 0;
@@ -67,9 +69,11 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
 
 last_event = -2
 last_time = 0.0
+#timeout_sent = False
 def interpret_eeg(timestamp, datapoint):
     global last_event
     global last_time
+    #global timeout_sent
 
     event = -1
     if datapoint < 750:
@@ -87,6 +91,12 @@ def interpret_eeg(timestamp, datapoint):
             last_event = -1
         return
         '''
+        '''
+        if last_event >= 0 and timestamp - last_time > tick * 5 and not timeout_sent:
+            # timeout, send last event
+            print("TIMEOUT")
+            process(2, 0)
+        '''
 
     #print(timestamp, "->", event)
     #print("last", last_event)
@@ -103,6 +113,7 @@ def interpret_eeg(timestamp, datapoint):
             #print("diff", timestamp - last_time)
             process(last_event, timestamp - last_time)
             last_time = timestamp
+            #timeout_sent = False
 
         last_event = event
 
