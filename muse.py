@@ -51,7 +51,10 @@ def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very 
 
     elif (action == 1):
         if (recent == 0):
-            letter += '1'
+            if (time > 2*tick):
+                letter += '1'
+            if (time < 2*tick):
+                letter += '0'
     elif (action == 2):
         if (recent ==0):
             letter += '0'
