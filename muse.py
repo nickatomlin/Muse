@@ -36,6 +36,9 @@ def process_letter():
     letter = ""
 
 def process(action, time): # 0 for close, 1 for open, 2 for timeout, 3 for very first call
+    global tick
+    global letter
+    global recent
     print("process", action, time)
 
     if (action == 3):
@@ -77,7 +80,7 @@ def interpret_eeg(timestamp, datapoint):
         # no blink, do nothing
         return
 
-    #print("event", event)
+    print("event", event)
     if last_event < 0:
         process(3, 0)
         last_event = event
